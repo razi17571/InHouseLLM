@@ -1,7 +1,11 @@
 Lib
 models
 pyvenv.cfg
-templates/k.html
 package.json
 package-lock.json
 node_modules/.package-lock.json
+Scripts/errant_compare.exe
+Scripts/errant_m2.exe
+Scripts/errant_parallel.exe
+Scripts/spacy.exe
+Scripts/weasel.exe

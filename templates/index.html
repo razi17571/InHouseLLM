@@ -14,12 +14,12 @@
     <header class="bg-primary p-3">
         <div class="container-fluid mx-auto text-white font-semibold">LLM Text Processor</div>
     </header>
-    <div class="container-fluid mx-auto mt-4 main-content">
-        <div class="file-upload mt-2">
+    <div class="container-fluid mx-auto mt-4">
+        <div class="mt-2">
             <label for="fileInput">
                 <i class="bi bi-file-earmark-text"></i> Upload File
             </label>
-            <input type="file" id="fileInput" accept=".txt, .docx, .pdf" style="display: none;" onchange="handleFileUpload()">
+            <input type="file" id="fileInput" accept=".txt" style="display: none;" onchange="handleFileUpload()">
         </div>
         <textarea id="userInput" class="border container-fluid px-3 py-2 rounded-md w-full"
             placeholder="Type your text here"></textarea>
@@ -29,7 +29,7 @@
             <button id="generateQuestionsButton" class="btn btn-outline-info" onclick="generateQuestions()">Generate Questions</button>
             <button id="questionAnsweringButton" class="btn btn-outline-warning" onclick="toggleQuestionAnswering()">Question Answering</button>
         </div>
-        <div id="questionAnsweringSection" style="display: none;">
+        <div id="questionAnsweringSection" style="display: none;" class="mt-3">
             <textarea id="questionInput" class="border container-fluid px-3 py-2 rounded-md w-full"
                 placeholder="Enter your questions here"></textarea>
             <button id="submitQuestionsButton" class="btn btn-outline-warning mt-2" onclick="submitQuestions()">Submit Questions</button>

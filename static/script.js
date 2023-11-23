@@ -76,15 +76,10 @@ function generateQuestions() {
     });
 }
 
-// Modify the questionAnswering function
+
 function prepareForQuestionAnswering() {
-    // Show the textarea for entering questions
     document.getElementById('userQuestions').style.display = 'block';
-
-    // Disable the button to avoid multiple clicks
     document.getElementById('questionAnsweringButton').disabled = true;
-
-    // Change the onclick event to call the actual questionAnswering function
     document.getElementById('questionAnsweringButton').onclick = function () {
         questionAnswering();
     };
@@ -96,7 +91,7 @@ function toggleQuestionAnswering() {
 }
 
 function submitQuestions() {
-    toggleQuestionAnswering()
+    toggleQuestionAnswering();
     var userInput = document.getElementById('userInput').value;
     var questionInput = document.getElementById('questionInput').value;
     var resultArea = document.getElementById('resultArea');
@@ -115,7 +110,7 @@ function submitQuestions() {
     .then(response => response.json())
     .then(data => {
         loading.style.display = 'none';
-        resultArea.innerHTML = '<p><strong>Questions and Answers:</strong></p>' + formatQA(data.questionsAndAnswers);
+        resultArea.innerHTML = '<p><strong>Questions and Answers:</strong></p>' + formatQuestionsAndAnswers(data.questionsAndAnswers);
     })
     .catch(error => {
         loading.style.display = 'none';
@@ -123,11 +118,11 @@ function submitQuestions() {
     });
 }
 
+
 function formatQA(questionsAndAnswers) {
     return questionsAndAnswers.map(qa => '<p><strong>Question:</strong> ' + qa.question + '</p><p><strong>Answer:</strong> ' + qa.answer + '</p>').join('');
 }
 
-// Function to format questions and answers for display
 function formatQuestionsAndAnswers(questionsAndAnswers) {
     var formattedHTML = '<ul>';
     questionsAndAnswers.forEach(qa => {
@@ -137,34 +132,6 @@ function formatQuestionsAndAnswers(questionsAndAnswers) {
     return formattedHTML;
 }
 
-
-// function grammarCheck() {
-//     var userInput = document.getElementById('userInput').value;
-//     var resultArea = document.getElementById('resultArea');
-//     var loading = document.getElementById('loading');
-
-//     resultArea.innerHTML = '';
-//     loading.style.display = 'block';
-
-//     fetch('/grammar_check', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-//         },
-//         body: new URLSearchParams({ 'text': userInput }).toString()
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//         loading.style.display = 'none';
-//         resultArea.innerHTML = '<p><strong>Grammar Check Result:</strong></p><p>' + data.result + '</p>';
-//     })
-//     .catch(error => {
-//         loading.style.display = 'none';
-//         resultArea.innerHTML = '<p>An error occurred while checking grammar.</p>';
-//     });
-// }
-
-// Modify the handleFileUpload function in your script.js
 function handleFileUpload() {
     var fileInput = document.getElementById('fileInput');
     var userInput = document.getElementById('userInput');
@@ -175,14 +142,12 @@ function handleFileUpload() {
     reader.onload = function (e) {
         userInput.value = e.target.result;
 
-        // Reset the value of the file input to allow selecting the same file again
         fileInput.value = '';
     };
 
     if (file) {
         reader.readAsText(file);
     } else {
-        // If no file is selected, clear the textarea
         userInput.value = '';
     }
 }
