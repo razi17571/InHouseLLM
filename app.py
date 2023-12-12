@@ -1,6 +1,5 @@
 import torch
-# from gramformer import Gramformer
-from transformers import BartForConditionalGeneration, BartTokenizer, T5ForConditionalGeneration, T5Tokenizer, AutoModelForQuestionAnswering, AutoTokenizer
+from transformers import BartForConditionalGeneration, BartTokenizer, T5ForConditionalGeneration, T5Tokenizer, AutoModelForQuestionAnswering, AutoTokenizer, AutoModelForSeq2SeqLM
 from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
@@ -31,9 +30,11 @@ question_answering_model = AutoModelForQuestionAnswering.from_pretrained(questio
 question_answering_model.to(device)
 question_answering_model.eval()
 
-# grammar_check_model_path = r"C:\Projects\InhouseLLM\models\grammar_error_correcter_v1"
-# grammar_check_model = Gramformer(models=1, model_paths=[grammar_check_model_path], use_gpu=True)
-
+grammar_check_model_path = r"C:\Projects\InhouseLLM\models\grammar_error_correcter_v1"
+grammar_check_tokenizer = AutoTokenizer.from_pretrained(grammar_check_model_path, use_auth_token = False)
+grammar_check_model = AutoModelForSeq2SeqLM.from_pretrained(grammar_check_model_path, use_auth_token = False)
+grammar_check_model.to(device)
+grammar_check_model.eval()
 
 @app.route('/')
 def home():
@@ -66,8 +67,8 @@ def generate_questions():
         questions = question_generation_tokenizer.decode(questions_ids[0], skip_special_tokens=True).split('<sep>')
         return jsonify({'questions': questions[:-1]})
 
-@app.route('/question_answering_batch', methods=['POST'])
-def question_answering_batch():
+@app.route('/question_answering', methods=['POST'])
+def question_answering():
     if request.method == 'POST':
         context = request.form['context']
         questions = request.form['questions'].split('\n')
@@ -83,12 +84,22 @@ def question_answering_batch():
             answers.append({'question': question.strip(), 'answer': answer.strip()})
         return jsonify({'questionsAndAnswers': answers})
 
-# @app.route('/grammar_check', methods=['POST'])
-# def grammar_check():
-#     if request.method == 'POST':
-#         text_to_check = request.form['text']
-#         corrected_text = grammar_check_model.correct(text_to_check)
-#         return jsonify({'corrected_text': corrected_text})
+@app.route('/grammar_check', methods=['POST'])
+def grammar_check():
+    if request.method == 'POST':
+        text_to_check = request.form['text']
+        influent_sentences = text_to_check.split('. ')
+        corrected_sentences = []
+        for influent_sentence in influent_sentences:
+            influent_sentence_ids = grammar_check_tokenizer.encode("gec:" + influent_sentence.lower(), return_tensors='pt').to(device)
+            corrected_pred_ids = grammar_check_model.generate(influent_sentence_ids, do_sample=False, max_length=128, num_beams=7, early_stopping=True, num_return_sequences=1).to(device)
+            corrected = set()
+            for pred in corrected_pred_ids:
+                corrected.add(grammar_check_tokenizer.decode(pred, skip_special_tokens=True).strip())               
+            corrected_sentence = '. '.join(corrected)
+            corrected_sentences.append(corrected_sentence)
+        corrected_text = '. '.join(corrected_sentences)
+        return jsonify({'corrected_text': corrected_text})
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -100,7 +100,7 @@ function submitQuestions() {
     resultArea.innerHTML = '';
     loading.style.display = 'block';
 
-    fetch('/question_answering_batch', {
+    fetch('/question_answering', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -150,4 +150,30 @@ function handleFileUpload() {
     } else {
         userInput.value = '';
     }
+}
+
+function grammarCheck() {
+    var userInput = document.getElementById('userInput').value;
+    var resultArea = document.getElementById('resultArea');
+    var loading = document.getElementById('loading');
+
+    resultArea.innerHTML = '';
+    loading.style.display = 'block';
+
+    fetch('/grammar_check', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        },
+        body: new URLSearchParams({ 'text': userInput }).toString()
+    })
+    .then(response => response.json())
+    .then(data => {
+        loading.style.display = 'none';
+        resultArea.innerHTML = '<p><strong>Corrected Text:</strong></p><p>' + data.corrected_text + '</p>';
+    })
+    .catch(error => {
+        loading.style.display = 'none';
+        resultArea.innerHTML = '<p>An error occurred during grammar check.</p>';
+    });
 }
