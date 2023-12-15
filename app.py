@@ -82,7 +82,7 @@ def question_answering():
             answer_end = torch.argmax(output.end_logits) + 1
             answer = question_answering_tokenizer.decode(input_ids[0, answer_start:answer_end], skip_special_tokens=True)
             answers.append({'question': question.strip(), 'answer': answer.strip()})
-        return jsonify({'questionsAndAnswers': answers})
+        return jsonify({'questionsAndAnswers': answers}) 
 
 @app.route('/grammar_check', methods=['POST'])
 def grammar_check():
@@ -97,8 +97,8 @@ def grammar_check():
             for pred in corrected_pred_ids:
                 corrected.add(grammar_check_tokenizer.decode(pred, skip_special_tokens=True).strip())               
             corrected_sentence = '. '.join(corrected)
-            corrected_sentences.append(corrected_sentence)
-        corrected_text = '. '.join(corrected_sentences)
+            corrected_sentences.append(corrected_sentence.capitalize())
+        corrected_text = ' '.join(corrected_sentences)
         return jsonify({'corrected_text': corrected_text})
 
 if __name__ == '__main__':
