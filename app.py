@@ -76,8 +76,11 @@ def question_answering():
         for question in questions:
             input_text = f"{question.strip()} [SEP] {context.strip()}"
             input_ids = question_answering_tokenizer.encode(input_text, return_tensors='pt', max_length=512, truncation = True).to(device)
-            output = question_answering_model({'input_ids': input_ids})
-            answer = question_answering_tokenizer.decode(input_ids, skip_special_tokens=True)
+            with torch.no_grad():
+                output = question_answering_model(**{'input_ids': input_ids})
+            answer_start = torch.argmax(output.start_logits)
+            answer_end = torch.argmax(output.end_logits) + 1
+            answer = question_answering_tokenizer.decode(input_ids[0, answer_start:answer_end], skip_special_tokens=True)
             answers.append({'question': question.strip(), 'answer': answer.strip()})
         return jsonify({'questionsAndAnswers': answers}) 
 
@@ -88,8 +91,8 @@ def grammar_check():
         influent_sentences = text_to_check.split('. ')
         corrected_sentences = []
         for influent_sentence in influent_sentences:
-            influent_sentence_ids = grammar_check_tokenizer.encode(influent_sentence.lower(), return_tensors='pt').to(device)
-            corrected_pred_ids = grammar_check_model.generate(influent_sentence_ids, max_length=128, num_beams=7, early_stopping=True).to(device)
+            influent_sentence_ids = grammar_check_tokenizer.encode("gec:" + influent_sentence.lower(), return_tensors='pt').to(device)
+            corrected_pred_ids = grammar_check_model.generate(influent_sentence_ids, do_sample=False, max_length=128, num_beams=7, early_stopping=True, num_return_sequences=1).to(device)
             corrected = set()
             for pred in corrected_pred_ids:
                 corrected.add(grammar_check_tokenizer.decode(pred, skip_special_tokens=True).strip())               
