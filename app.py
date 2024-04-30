@@ -6,31 +6,31 @@ app = Flask(__name__)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-summarization_model_path = r"C:\Projects\InhouseLLM\models\bart-large-cnn"
+summarization_model_path = r"facebook/bart-large-cnn"
 summarization_tokenizer = BartTokenizer.from_pretrained(summarization_model_path)
 summarization_model = BartForConditionalGeneration.from_pretrained(summarization_model_path)
 summarization_model.to(device)
 summarization_model.eval()
 
-headline_model_path = r"C:\Projects\InhouseLLM\models\t5-base-en-generate-headline"
+headline_model_path = r"Michau/t5-base-en-generate-headline"
 headline_tokenizer = T5Tokenizer.from_pretrained(headline_model_path)
 headline_model = T5ForConditionalGeneration.from_pretrained(headline_model_path)
 headline_model.to(device)
 headline_model.eval()
 
-question_generation_model_path = r"C:\Projects\InhouseLLM\models\t5-base-e2e-qg"
+question_generation_model_path = r"valhalla/t5-base-e2e-qg"
 question_generation_tokenizer = T5Tokenizer.from_pretrained(question_generation_model_path)
 question_generation_model = T5ForConditionalGeneration.from_pretrained(question_generation_model_path)
 question_generation_model.to(device)
 question_generation_model.eval()
 
-question_answering_model_path = r"C:\Projects\InhouseLLM\models\roberta-base-squad2"
+question_answering_model_path = r"deepset/roberta-base-squad2"
 question_answering_tokenizer = AutoTokenizer.from_pretrained(question_answering_model_path)
 question_answering_model = AutoModelForQuestionAnswering.from_pretrained(question_answering_model_path)
 question_answering_model.to(device)
 question_answering_model.eval()
 
-grammar_check_model_path = r"C:\Projects\InhouseLLM\models\grammar_error_correcter_v1"
+grammar_check_model_path = r"prithivida/grammar_error_correcter_v1"
 grammar_check_tokenizer = AutoTokenizer.from_pretrained(grammar_check_model_path, use_auth_token = False)
 grammar_check_model = AutoModelForSeq2SeqLM.from_pretrained(grammar_check_model_path, use_auth_token = False)
 grammar_check_model.to(device)
