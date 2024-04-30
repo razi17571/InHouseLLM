@@ -18,7 +18,7 @@ To get started with the application, follow these instructions:
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/nlp-web-app.git
+git clone https://github.com/yourusername/nlp-web-app.git](https://github.com/razi17571/InHouseLLM.git
 cd nlp-web-app
 ```
 
