@@ -38,6 +38,32 @@
             padding: 10px;
             border-radius: 5px;
         }
+        .modal-header, .modal-body, .modal-footer{
+            background-color: #121212;
+            color: #e2e2e2;
+            border: none;
+        }
+        .modal-body textarea{
+            background-color: #1f1f1f;
+            color: #e2e2e2;
+            border-color: #767676 !important;
+            width: 100%;
+            border-radius: 5px;
+            height: 310px;
+        }
+        .modal-body{
+            padding: 0px 20px 0px !important;
+        }
+        .modal-header{
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            padding: 15px 20px 10px 20px !important;
+        }
+        .modal-footer{
+            padding: 10px;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
         
         #userInput, #Operation {
             background-color: #1f1f1f;
@@ -84,8 +110,8 @@
         <label for="fileInput" class="upFile pb-2">
             <i class="bi bi-file-earmark-text"></i> Upload File
         </label>
-        <input id="userInput" class="border container-fluid px-3 py-2 rounded-2"
-                  placeholder="Type your text here">
+        <textarea id="userInput" class="border container-fluid px-3 py-2 rounded-2"
+                  placeholder="Type your text here"></textarea> 
         <div class="options-container">
             <select name="options" id="Operation" class="rounded-2 py-2 me-2 text-center">
                 <option value="Summarize" selected>Summarize</option>
@@ -97,11 +123,24 @@
             <button id="submitButton" class="btn btn-success sub-btn" onclick="submitOperation()">Submit</button>
         </div>
     </div>
-    <div id="questionAnsweringSection" class="mt-3" style="display: none;">
-        <textarea id="questionInput" class="border container-fluid px-3 py-2 rounded-md"
-                 placeholder="Enter your questions here"></textarea>
-        <button id="submitQuestionsButton" class="btn btn-outline-warning mt-2 btn-size" onclick="submitQuestions()">Submit Questions</button>
-    </div>
+    <div class="modal fade" id="questionModal" tabindex="-1" aria-labelledby="questionModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header py-0">
+              <h5 class="modal-title" id="questionModalLabel">Enter your question</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body my-0">
+              <textarea id="questionInput" class="border container-fluid px-3 py-1 rounded-2"></textarea>
+            </div>
+            <div class="modal-footer my-0">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button id="submitQuestionsButton" class="btn btn-success btn-size" onclick="submitQuestions()">Submit Questions</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    
     <div id="resultArea" class="mt-4"></div>
     <div id="loading" style="display: none;">Loading...</div>
 </div>
