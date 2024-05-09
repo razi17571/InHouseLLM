@@ -101,16 +101,20 @@ function generateQuestions() {
 }
 
 function prepareForQuestionAnswering() {
-    var questionAnsweringSection = document.getElementById('questionAnsweringSection');
-    questionAnsweringSection.style.display = 'block';
+    var questionModal = new bootstrap.Modal(document.getElementById('questionModal'), {
+        keyboard: false
+    });
+    questionModal.show();
     document.getElementById('submitQuestionsButton').disabled = false;
     document.getElementById('submitButton').setAttribute('onclick', 'toggleQuestionAnswering()');
-}
+}   
 
 function toggleQuestionAnswering() {
     var questionAnsweringSection = document.getElementById('questionAnsweringSection');
-    questionAnsweringSection.style.display = (questionAnsweringSection.style.display === 'none') ? 'block' : 'none';
+    var modal = bootstrap.Modal.getInstance(questionAnsweringSection); // Get modal instance
+    modal.toggle(); // Toggle modal visibility
 }
+
 
 function submitQuestions() {
     toggleQuestionAnswering();
