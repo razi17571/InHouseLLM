@@ -1,3 +1,27 @@
+function submitOperation() {
+    var operation = document.getElementById('Operation').value;
+
+    switch (operation) {
+        case 'Summarize':
+            summarizeText();
+            break;
+        case 'Generate Headline':
+            generateHeadline();
+            break;
+        case 'Generate Questions':
+            generateQuestions();
+            break;
+        case 'Question Answering':
+            prepareForQuestionAnswering();
+            break;
+        case 'Grammar Check':
+            grammarCheck();
+            break;
+        default:
+            break;
+    }
+}
+
 function summarizeText() {
     var userInput = document.getElementById('userInput').value;
     var resultArea = document.getElementById('resultArea');
@@ -76,13 +100,11 @@ function generateQuestions() {
     });
 }
 
-
 function prepareForQuestionAnswering() {
-    document.getElementById('userQuestions').style.display = 'block';
-    document.getElementById('questionAnsweringButton').disabled = true;
-    document.getElementById('questionAnsweringButton').onclick = function () {
-        questionAnswering();
-    };
+    var questionAnsweringSection = document.getElementById('questionAnsweringSection');
+    questionAnsweringSection.style.display = 'block';
+    document.getElementById('submitQuestionsButton').disabled = false;
+    document.getElementById('submitButton').setAttribute('onclick', 'toggleQuestionAnswering()');
 }
 
 function toggleQuestionAnswering() {
@@ -118,11 +140,6 @@ function submitQuestions() {
     });
 }
 
-
-function formatQA(questionsAndAnswers) {
-    return questionsAndAnswers.map(qa => '<p><strong>Question:</strong> ' + qa.question + '</p><p><strong>Answer:</strong> ' + qa.answer + '</p>').join('');
-}
-
 function formatQuestionsAndAnswers(questionsAndAnswers) {
     var formattedHTML = '<ul>';
     questionsAndAnswers.forEach(qa => {
@@ -130,26 +147,6 @@ function formatQuestionsAndAnswers(questionsAndAnswers) {
     });
     formattedHTML += '</ul>';
     return formattedHTML;
-}
-
-function handleFileUpload() {
-    var fileInput = document.getElementById('fileInput');
-    var userInput = document.getElementById('userInput');
-
-    var file = fileInput.files[0];
-    var reader = new FileReader();
-
-    reader.onload = function (e) {
-        userInput.value = e.target.result;
-
-        fileInput.value = '';
-    };
-
-    if (file) {
-        reader.readAsText(file);
-    } else {
-        userInput.value = '';
-    }
 }
 
 function grammarCheck() {
